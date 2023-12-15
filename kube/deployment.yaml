@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodebackend
+  labels:
+    app: nodebackend
+    namespace: nodebackend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodebackend
+  template:
+    metadata:
+      labels:
+        app: nodebackend
+    spec:
+      containers:
+        - name: nodebackend
+          image: 663665160542.dkr.ecr.ca-central-1.amazonaws.com/nodebackend:be5809ce0fe89a76cd7a94f596190fc4779a3839
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Always

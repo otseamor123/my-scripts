@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bankly-scratchmems
+  labels:
+    app: bankly-scratchmems
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bankly-scratchmems
+  template:
+    metadata:
+      labels:
+        app: bankly-scratchmems
+    spec:
+      containers:
+      - name: bankly-scratchmems
+        image: registry.bankly.ng/bankly/scratchmems:prod
+        resources:
+          requests:
+            cpu: 25m
+            memory: 263M
+          limits:
+            cpu: 251m
+            memory: 750M
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bankly-scratchmems-svc
+spec:
+  selector:
+    app: bankly-scratchmems
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 80
+  type: NodePort
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: bankly-scratchme-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bankly-scratchmems
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50
