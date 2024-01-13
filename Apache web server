@@ -40,7 +40,7 @@ echo "### File Unzipped Successfully! ###"
 
 # Print a fancy header for deploying web templates
 print_header "Deploying Web Templates"
-sudo cp -r 2136_kool_form_pack.zip/* /var/www/html
+sudo cp -r 2136_kool_form_pack/* /var/www/html
 echo "### Web Templates Deployed! ###"
 
 # Print a fancy header for restarting the HTTPD service
