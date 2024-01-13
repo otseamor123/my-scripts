@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# Function to print a fancy header
+print_header() {
+    echo "########################################################"
+    echo "#### $1"
+    echo "########################################################"
+}
+
+# Print a fancy header and install wget, unzip, and httpd (Apache web server)
+print_header "Installing wget, unzip, and httpd"
+yum install wget unzip httpd -y
+echo "### Installation Complete! ###"
+
+# Print a fancy header and start the Apache web server
+print_header "Starting HTTPD Service"
+sudo systemctl start httpd
+echo "### HTTPD Service Started! ###"
+
+# Print a fancy header and enable the Apache web server to start on boot
+print_header "Enabling HTTPD on Boot"
+sudo systemctl enable httpd
+echo "### HTTPD Enabled on Boot! ###"
+
+# Print a fancy header for preparing web files
+print_header "Preparing Web Files"
+mkdir -p /tmp/webfiles
+cd /tmp/webfiles
+echo "### Directory /tmp/webfiles Ready! ###"
+
+# Print a fancy header for downloading the web template pack
+print_header "Downloading Web Template Pack"
+wget https://www.tooplate.com/zip-templates/2136_kool_form_pack.zip
+echo "### Download Complete! ###"
+
+# Print a fancy header for unzipping the downloaded file
+print_header "Unzipping Downloaded File"
+unzip 2136_kool_form_pack.zip
+echo "### File Unzipped Successfully! ###"
+
+# Print a fancy header for deploying web templates
+print_header "Deploying Web Templates"
+sudo cp -r 2136_kool_form_pack.zip/* /var/www/html
+echo "### Web Templates Deployed! ###"
+
+# Print a fancy header for restarting the HTTPD service
+print_header "Restarting HTTPD Service"
+systemctl restart httpd
+echo "### HTTPD Service Restarted! ###"
+
+# Print a fancy header for adding port 80 to the firewall
+print_header "Configuring Firewall for HTTPD"
+sudo firewall-cmd --permanent --add-port=80/tcp
+sudo firewall-cmd --reload
+echo "### Port 80 Opened in Firewall ###"
+
+# Print a fancy header for cleaning up
+print_header "Cleaning Up"
+rm -rf /tmp/webfiles
+echo "### Clean Up Complete! ###"
+
+# Print a fancy header for checking the status of the HTTPD service
+print_header "Checking HTTPD Service Status"
+sudo systemctl status httpd
+
+print_header "Web Server Setup Complete! Enjoy Your New Website!"
